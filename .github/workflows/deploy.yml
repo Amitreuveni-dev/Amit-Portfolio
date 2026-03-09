@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: Amit-Protofolio
+        working-directory: Amit-Portfolio
 
     steps:
       - uses: actions/checkout@v4
@@ -27,14 +27,14 @@ jobs:
         with:
           node-version: 20
           cache: "npm"
-          cache-dependency-path: Amit-Protofolio/package-lock.json
+          cache-dependency-path: Amit-Portfolio/package-lock.json
 
       - run: npm ci
       - run: npm run build
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: Amit-Protofolio/dist
+          path: Amit-Portfolio/dist
 
   deploy:
     needs: build

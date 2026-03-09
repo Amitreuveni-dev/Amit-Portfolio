@@ -1,5 +1,6 @@
 {
-  "name": "amit-protofolio",
+  "name": "amit-portfolio",
+  "homepage": "https://amitreuveni-dev.github.io/Amit-Portfolio/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
