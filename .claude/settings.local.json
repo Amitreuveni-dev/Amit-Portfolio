@@ -7,7 +7,18 @@
       "Bash(cmd /c \"del /q Header\\\\index.ts Hero\\\\index.ts Timeline\\\\index.ts Projects\\\\index.ts Contact\\\\index.ts\")",
       "Bash(dir:*)",
       "Bash(findstr:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(npm run *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(awk -F/ '{print $1\"/\"$2\"/\"$3}')",
+      "Bash(npm audit *)",
+      "Bash(git -C \"C:\\\\Users\\\\amitr\\\\Portfolio\\\\Amit-Portfolio\" ls-files --error-unmatch .env)",
+      "Bash(git -C \"C:\\\\Users\\\\amitr\\\\Portfolio\\\\Amit-Portfolio\" ls-files .env)",
+      "Bash(git *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\amitr\\\\Portfolio\\\\Amit-Portfolio\\\\src\" -Recurse -Filter \"*.tsx\")",
+      "Bash(Select-Object -ExpandProperty FullName)"
     ]
   }
 }

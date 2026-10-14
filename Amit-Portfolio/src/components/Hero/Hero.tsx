@@ -63,7 +63,7 @@ const Hero = (): React.JSX.Element => {
           <motion.h1 className={styles.title} variants={itemVariants}>Amit Reuveni</motion.h1>
           <motion.h2 className={styles.subtitle} variants={itemVariants}>Full Stack Developer</motion.h2>
           <motion.p className={styles.description} variants={itemVariants}>
-            Combat engineer turned full-stack developer. I ship fast, write clean code, and build things that matter — currently open to full-time engineering roles.
+            Combat engineer turned full-stack developer. I ship fast, write clean code, and build things that matter currently open to full-time engineering roles.
           </motion.p>
           <motion.div className={styles.techStack} variants={itemVariants}>
             <span className={styles.techLabel}>Tech Stack</span>

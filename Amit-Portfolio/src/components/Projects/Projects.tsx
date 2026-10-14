@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import { motion, useInView, type Variants } from 'framer-motion';
-import { ExternalLink, Github, Sparkles, Gamepad2, BrainCircuit, CalendarDays, Shield } from 'lucide-react';
+import { ExternalLink, Github, Gamepad2, CalendarDays, Shield } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import styles from './Projects.module.scss';
 
@@ -27,17 +27,7 @@ const PROJECTS_DATA: Project[] = [
     liveUrl: 'https://milu-ai.vercel.app/',
     gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
   },
-  {
-    id: 'syncromind-ai',
-    title: 'SyncroMind AI',
-    description:
-    'An advanced AI-powered task management ecosystem. Features an intelligent project generator, a specialized "Focus Room" for deep work, and an AI Mind Center that analyzes project health and provides actionable insights. Built for high-performance execution.',
-    technologies: ['Next.js 16', 'Tailwind v4', 'Prisma', 'MySQL', 'Vercel AI SDK', 'Framer Motion'],
-    Icon: BrainCircuit,
-    githubUrl: 'https://github.com/Amitreuveni-dev/nextjs-mysql-task-manager',
-    liveUrl: 'https://nextjs-task-manager-omega.vercel.app/login?callbackUrl=https%3A%2F%2Fnextjs-task-manager-omega.vercel.app%2Fdashboard',
-    gradient: 'linear-gradient(135deg, #6366f1 0%, #a855f7 100%)',
-  },
+  
   {
   id: 'sidur-app',
   title: 'Sidur - AI Shift Management',
@@ -60,17 +50,7 @@ const PROJECTS_DATA: Project[] = [
     liveUrl: "https://wordle-hn9f.onrender.com",
     gradient: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
   },
-  {
-    id: 'share-a-fact',
-    title: 'Share A Fact',
-    description:
-      'A collaborative platform where users can share interesting facts with the community. Features voting system, category filtering, and real-time updates.',
-    technologies: ['React', 'TypeScript', 'Supabase', 'CSS Modules'],
-    Icon: Sparkles,
-    githubUrl: 'https://github.com/Amitreuveni-dev/Amit-Projects/tree/main/Share-A-Fact',
-    liveUrl: 'https://share-a-facts.netlify.app/',
-    gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-  }
+
 ];
 
 const containerVariants: Variants = {
