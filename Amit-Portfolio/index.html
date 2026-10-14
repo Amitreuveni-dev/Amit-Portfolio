@@ -4,7 +4,46 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>amit-protofolio</title>
+    <title>Amit Reuveni · Full-Stack Developer</title>
+    <meta
+      name="description"
+      content="Full-stack developer and former IDF combat engineering squad commander. I build products with React, Next.js and the Claude API, like MiluAI, an AI assistant for IDF reservists."
+    />
+    <meta name="theme-color" content="#0a1013" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Amit Reuveni" />
+    <meta property="og:title" content="Amit Reuveni · Full-Stack Developer" />
+    <meta
+      property="og:description"
+      content="From clearing routes to shipping AI products. React, Next.js and the Claude API."
+    />
+    <meta property="og:url" content="https://amitreuveni-dev.github.io/Amit-Portfolio/" />
+    <meta property="og:image" content="https://amitreuveni-dev.github.io/Amit-Portfolio/og-image.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Amit Reuveni, full-stack developer: From clearing routes to shipping AI products." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://amitreuveni-dev.github.io/Amit-Portfolio/og-image.jpg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    />
+
+    <!-- Set the theme before first paint so dark-mode visitors never see a light flash -->
+    <script>
+      try {
+        var stored = localStorage.getItem('theme');
+        var theme = ['light', 'dark', 'high-contrast'].indexOf(stored) !== -1
+          ? stored
+          : window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>

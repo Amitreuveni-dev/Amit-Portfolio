@@ -1,5 +1,12 @@
-// Font Sizes
+// Identity: a field map at night. Ink backgrounds, faint contour lines,
+// and one signal-amber accent taken from engineering field markings.
 :root {
+  // Typography
+  --font-display: 'Archivo', 'Arial Narrow', system-ui, sans-serif;
+  --font-body: 'Archivo', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', Consolas, monospace;
+
+  // Font Sizes
   --base-font-size: 16px;
   --font-size-xs: calc(var(--base-font-size) * 0.75);
   --font-size-sm: calc(var(--base-font-size) * 0.875);
@@ -19,24 +26,19 @@
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
+  --section-padding: clamp(4.5rem, 9vw, 7.5rem);
 
   // Border Radius
   --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
   --radius-full: 9999px;
 
   // Transitions
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
   --transition-slow: 350ms ease;
-
-  // Shadows
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
 
   // Z-index layers
   --z-dropdown: 100;
@@ -51,132 +53,120 @@
 
   // Container
   --container-max-width: 1200px;
-  --container-padding: var(--spacing-md);
+  --container-padding: clamp(1rem, 4vw, 2rem);
 }
 
-// Light Theme (Default) - Modern & Refined
+// Dark Theme (the identity's home)
 :root,
+[data-theme='dark'] {
+  --color-primary: #f2a93b;
+  --color-primary-hover: #f6bc62;
+  --color-primary-light: rgba(242, 169, 59, 0.12);
+
+  --color-bg-primary: #0a1013;
+  --color-bg-secondary: #0e161a;
+  --color-bg-tertiary: #18242a;
+  --color-surface: #111a1e;
+
+  --color-text-primary: #e8eef0;
+  --color-text-secondary: #a6b4ba;
+  --color-text-tertiary: #7f8f97;
+  --color-text-inverse: #1a1206;
+
+  --color-border: rgba(160, 190, 200, 0.16);
+  --color-border-hover: rgba(242, 169, 59, 0.55);
+
+  --color-accent: #5fb3a8;
+  --color-muted-fill: #26343b;
+
+  --color-success: #6bc28f;
+  --color-error: #f0785f;
+  --color-warning: #f2a93b;
+  --color-info: #7ba9e6;
+
+  --color-focus-ring: rgba(242, 169, 59, 0.75);
+
+  --color-contour: rgba(150, 185, 195, 0.1);
+  --color-contour-index: rgba(242, 169, 59, 0.18);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 16px 32px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+// Light Theme: the same map printed on paper
 [data-theme='light'] {
-  // Primary Colors - Vibrant blue with depth
-  --color-primary: #4f46e5;
-  --color-primary-hover: #4338ca;
-  --color-primary-light: rgba(79, 70, 229, 0.1);
+  --color-primary: #8f5300;
+  --color-primary-hover: #774500;
+  --color-primary-light: rgba(143, 83, 0, 0.1);
 
-  // Background Colors - Subtle warm/cool tints for depth
-  --color-bg-primary: #fafbff;
-  --color-bg-secondary: #f0f4ff;
-  --color-bg-tertiary: #e8edff;
+  --color-bg-primary: #f2f5f6;
+  --color-bg-secondary: #e9eef0;
+  --color-bg-tertiary: #dde5e8;
+  --color-surface: #ffffff;
 
-  // Text Colors
-  --color-text-primary: #1a1a2e;
-  --color-text-secondary: #4a4a68;
-  --color-text-tertiary: #8888a4;
+  --color-text-primary: #10202a;
+  --color-text-secondary: #44555d;
+  --color-text-tertiary: #5f6f77;
   --color-text-inverse: #ffffff;
 
-  // Border Colors - Softer with slight color
-  --color-border: rgba(79, 70, 229, 0.12);
-  --color-border-hover: rgba(79, 70, 229, 0.25);
+  --color-border: rgba(16, 32, 42, 0.14);
+  --color-border-hover: rgba(143, 83, 0, 0.5);
 
-  // Accent Colors
-  --color-accent: #8b5cf6;
-  --color-accent-olive: #10b981;
+  --color-accent: #2b7a70;
+  --color-muted-fill: #d5dee2;
 
-  // Status Colors
-  --color-success: #10b981;
-  --color-error: #ef4444;
-  --color-warning: #f59e0b;
-  --color-info: #3b82f6;
+  --color-success: #2c7a4c;
+  --color-error: #b23a28;
+  --color-warning: #8f5300;
+  --color-info: #2c62a6;
 
-  // Focus
-  --color-focus-ring: rgba(79, 70, 229, 0.4);
+  --color-focus-ring: rgba(143, 83, 0, 0.6);
 
-  // Modern Shadows - Colored shadows for depth
-  --shadow-sm: 0 1px 3px rgba(79, 70, 229, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 12px rgba(79, 70, 229, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 12px 24px rgba(79, 70, 229, 0.12), 0 4px 8px rgba(0, 0, 0, 0.04);
-  --shadow-xl: 0 24px 48px rgba(79, 70, 229, 0.16), 0 8px 16px rgba(0, 0, 0, 0.04);
-}
+  --color-contour: rgba(30, 60, 72, 0.12);
+  --color-contour-index: rgba(143, 83, 0, 0.26);
 
-// Dark Theme
-[data-theme='dark'] {
-  // Primary Colors
-  --color-primary: #3b82f6;
-  --color-primary-hover: #60a5fa;
-  --color-primary-light: #1e3a5f;
-
-  // Background Colors
-  --color-bg-primary: #0f172a;
-  --color-bg-secondary: #1e293b;
-  --color-bg-tertiary: #334155;
-
-  // Text Colors
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #cbd5e1;
-  --color-text-tertiary: #64748b;
-  --color-text-inverse: #0f172a;
-
-  // Border Colors
-  --color-border: #334155;
-  --color-border-hover: #475569;
-
-  // Accent Colors
-  --color-accent: #a78bfa;
-  --color-accent-olive: #84cc16;
-
-  // Status Colors
-  --color-success: #4ade80;
-  --color-error: #f87171;
-  --color-warning: #fbbf24;
-  --color-info: #60a5fa;
-
-  // Focus
-  --color-focus-ring: rgba(59, 130, 246, 0.5);
-
-  // Shadows (darker for dark mode)
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 2px rgba(16, 32, 42, 0.06);
+  --shadow-md: 0 6px 16px rgba(16, 32, 42, 0.08);
+  --shadow-lg: 0 16px 32px rgba(16, 32, 42, 0.1);
+  --shadow-xl: 0 30px 60px rgba(16, 32, 42, 0.14);
 }
 
 // High Contrast Theme
 [data-theme='high-contrast'] {
-  // Primary Colors
-  --color-primary: #0066cc;
-  --color-primary-hover: #0052a3;
-  --color-primary-light: #cce5ff;
+  --color-primary: #ffd400;
+  --color-primary-hover: #ffe55c;
+  --color-primary-light: rgba(255, 212, 0, 0.18);
 
-  // Background Colors
   --color-bg-primary: #000000;
-  --color-bg-secondary: #1a1a1a;
-  --color-bg-tertiary: #333333;
+  --color-bg-secondary: #000000;
+  --color-bg-tertiary: #1a1a1a;
+  --color-surface: #000000;
 
-  // Text Colors
   --color-text-primary: #ffffff;
-  --color-text-secondary: #e6e6e6;
-  --color-text-tertiary: #b3b3b3;
+  --color-text-secondary: #f0f0f0;
+  --color-text-tertiary: #d6d6d6;
   --color-text-inverse: #000000;
 
-  // Border Colors
   --color-border: #ffffff;
-  --color-border-hover: #ffff00;
+  --color-border-hover: #ffd400;
 
-  // Accent Colors
-  --color-accent: #ffff00;
-  --color-accent-olive: #00ff00;
+  --color-accent: #00ffff;
+  --color-muted-fill: #4d4d4d;
 
-  // Status Colors
   --color-success: #00ff00;
-  --color-error: #ff0000;
-  --color-warning: #ffff00;
+  --color-error: #ff6b6b;
+  --color-warning: #ffd400;
   --color-info: #00ffff;
 
-  // Focus
-  --color-focus-ring: rgba(255, 255, 0, 0.8);
+  --color-focus-ring: #ffd400;
 
-  // Shadows (more pronounced for visibility)
-  --shadow-sm: 0 1px 2px rgba(255, 255, 255, 0.1);
-  --shadow-md: 0 4px 6px rgba(255, 255, 255, 0.15);
-  --shadow-lg: 0 10px 15px rgba(255, 255, 255, 0.15);
-  --shadow-xl: 0 20px 25px rgba(255, 255, 255, 0.2);
+  --color-contour: rgba(255, 255, 255, 0.16);
+  --color-contour-index: rgba(255, 212, 0, 0.4);
+
+  --shadow-sm: none;
+  --shadow-md: none;
+  --shadow-lg: none;
+  --shadow-xl: none;
 }

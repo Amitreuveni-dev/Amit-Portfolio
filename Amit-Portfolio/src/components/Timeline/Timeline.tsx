@@ -1,7 +1,6 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { motion, useInView, type Variants } from 'framer-motion';
-import { Shield, GraduationCap, Heart, Calendar } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import styles from './Timeline.module.scss';
 
 type TimelineTheme = 'military' | 'education' | 'volunteer';
@@ -14,8 +13,18 @@ interface TimelineEvent {
   description: string;
   period: string;
   highlights: string[];
-  Icon: LucideIcon;
+  isCurrent?: boolean;
 }
+
+const THEME_LABELS: Record<TimelineTheme, string> = {
+  education: 'Education',
+  military: 'Service',
+  volunteer: 'Volunteering',
+};
+
+// Oldest first, so the log reads as a story from the field to the stack and ends on "Now".
+// The entries before military service start collapsed behind a toggle.
+const EARLIER_ENTRIES = 2;
 
 const TIMELINE_DATA: TimelineEvent[] = [
   {
@@ -27,7 +36,6 @@ const TIMELINE_DATA: TimelineEvent[] = [
       'Completed high school education with a focus on tourism studies, developing communication skills and cultural awareness while successfully passing matriculation exams.',
     period: '2014 - 2019',
     highlights: ['Matriculation Exams', 'Tourism Studies'],
-    Icon: GraduationCap,
   },
   {
     id: 'volunteer',
@@ -38,7 +46,6 @@ const TIMELINE_DATA: TimelineEvent[] = [
       'Volunteered as a mentor and leader, guiding youth through educational and personal development activities, fostering the next generation of community leaders.',
     period: '2017 - 2019',
     highlights: ['Youth Mentorship', 'Community Service', 'Leadership Development'],
-    Icon: Heart,
   },
   {
     id: 'military-service',
@@ -49,7 +56,6 @@ const TIMELINE_DATA: TimelineEvent[] = [
       'Led a squad of combat engineers, developing leadership skills, strategic thinking, and the ability to perform under high-pressure situations.',
     period: '2019 - 2022',
     highlights: ['Squad Leadership', 'Strategic Planning', 'Team Management', 'High-Pressure Decision Making'],
-    Icon: Shield,
   },
   {
     id: 'military-reserve',
@@ -60,7 +66,6 @@ const TIMELINE_DATA: TimelineEvent[] = [
       'Called to active reserve duty during Operation Swords of Iron, demonstrating commitment to national defense while balancing professional responsibilities.',
     period: 'Oct 2023 - Present',
     highlights: ['Active Reserve Service', 'Combat Engineering', 'Leadership Under Pressure'],
-    Icon: Shield,
   },
   {
     id: 'education',
@@ -71,108 +76,85 @@ const TIMELINE_DATA: TimelineEvent[] = [
       'Comprehensive training in modern web technologies including React, Node.js, TypeScript, and database management. Building real-world applications with industry best practices.',
     period: 'Apr 2024 - Jan 2026',
     highlights: ['React & TypeScript', 'Node.js & Express', 'MongoDB & SQL', 'REST APIs'],
-    Icon: GraduationCap,
+  },
+  {
+    id: 'degree',
+    theme: 'education',
+    title: 'B.Sc. in Information Systems',
+    subtitle: 'Ramat Gan Academic College',
+    description:
+      'Starting a three-year B.Sc. in Information Systems with a planned specialization in Data Analysis or Cyber Security, building a strong academic foundation alongside hands-on full-stack development.',
+    period: 'Oct 2026 - 2029',
+    highlights: ['Information Systems', 'Data Analysis', 'Cyber Security', 'Software Engineering'],
+    isCurrent: true,
   },
 ];
 
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
+const entryVariants: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: (index: number) => ({
     opacity: 1,
+    y: 0,
     transition: {
-      staggerChildren: 0.3,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const itemVariantsLeft: Variants = {
-  hidden: { opacity: 0, x: -100 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 100,
-      damping: 15,
-    },
-  },
-};
-
-const itemVariantsRight: Variants = {
-  hidden: { opacity: 0, x: 100 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 100,
-      damping: 15,
-    },
-  },
-};
-
-const lineVariants: Variants = {
-  hidden: { scaleY: 0 },
-  visible: {
-    scaleY: 1,
-    transition: {
-      duration: 1.5,
+      duration: 0.45,
       ease: 'easeOut',
+      delay: Math.min(index, 4) * 0.08,
     },
-  },
+  }),
 };
 
-interface TimelineItemProps {
-  event: TimelineEvent;
-  index: number;
-}
-
-const TimelineItem = ({ event, index }: TimelineItemProps): React.JSX.Element => {
-  const isLeft = index % 2 === 0;
-  const itemRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(itemRef, { once: true, margin: '-100px' });
-
-  return (
-    <motion.div ref={itemRef} className={`${styles.timelineItem} ${styles[event.theme]} ${isLeft ? styles.left : styles.right}`}
-      variants={isLeft ? itemVariantsLeft : itemVariantsRight} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-      <div className={styles.content}>
-        <div className={styles.iconWrapper}><event.Icon size={24} /></div>
-        <div className={styles.details}>
-          <div className={styles.header}>
-            <h3 className={styles.title}>{event.title}</h3>
-            <span className={styles.period}><Calendar size={14} />{event.period}</span>
-          </div>
-          <p className={styles.subtitle}>{event.subtitle}</p>
-          <p className={styles.description}>{event.description}</p>
-          <div className={styles.highlights}>
-            {event.highlights.map((highlight) => (<span key={highlight} className={styles.tag}>{highlight}</span>))}
-          </div>
-        </div>
-      </div>
-      <div className={styles.connector}><div className={styles.dot} /></div>
-    </motion.div>
-  );
-};
+const TimelineEntry = ({ event, index, isInView }: { event: TimelineEvent; index: number; isInView: boolean }): React.JSX.Element => (
+  <motion.li className={`${styles.entry} ${styles[event.theme]}`} variants={entryVariants} custom={index}
+    initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
+    <div className={styles.meta}>
+      <span className={styles.period}>{event.period}</span>
+      <span className={styles.type}>{THEME_LABELS[event.theme]}</span>
+    </div>
+    <div className={styles.marker} aria-hidden="true"><span className={styles.dot} /></div>
+    <div className={styles.body}>
+      <h3 className={styles.title}>
+        {event.title}
+        {event.isCurrent && <span className={styles.now}>Now</span>}
+      </h3>
+      <p className={styles.subtitle}>{event.subtitle}</p>
+      <p className={styles.description}>{event.description}</p>
+      <ul className={styles.highlights}>
+        {event.highlights.map((highlight) => (<li key={highlight} className={styles.tag}>{highlight}</li>))}
+      </ul>
+    </div>
+  </motion.li>
+);
 
 const Timeline = (): React.JSX.Element => {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
+  const [showEarlier, setShowEarlier] = useState<boolean>(false);
+
+  const visibleEvents = showEarlier ? TIMELINE_DATA : TIMELINE_DATA.slice(EARLIER_ENTRIES);
+  const firstYear = TIMELINE_DATA[showEarlier ? 0 : EARLIER_ENTRIES].period.match(/\d{4}/)?.[0];
 
   return (
     <section id="timeline" className={styles.timeline} ref={sectionRef}>
       <div className={styles.container}>
-        <motion.div className={styles.sectionHeader} initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }} transition={{ type: 'spring', stiffness: 100, damping: 15 }}>
-          <h2 className={styles.sectionTitle}>My Journey</h2>
-          <p className={styles.sectionSubtitle}>From military leadership to full-stack development</p>
-        </motion.div>
-        <div className={styles.timelineWrapper}>
-          <motion.div className={styles.line} variants={lineVariants} initial="hidden" animate={isInView ? 'visible' : 'hidden'} />
-          <motion.div className={styles.events} variants={containerVariants} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-            {TIMELINE_DATA.map((event, index) => (<TimelineItem key={event.id} event={event} index={index} />))}
-          </motion.div>
-        </div>
+        <header className={styles.sectionHeader}>
+          <p className={styles.eyebrow}>Mission log</p>
+          <div className={styles.headingRow}>
+            <h2 className={styles.sectionTitle}>From the field to the stack</h2>
+            <span className={styles.order}>{firstYear} → Now</span>
+          </div>
+        </header>
+
+        <button type="button" className={styles.toggle} onClick={() => setShowEarlier((prev) => !prev)}
+          aria-expanded={showEarlier} aria-controls="mission-log">
+          <ChevronDown size={16} aria-hidden="true" className={showEarlier ? '' : styles.flipped} />
+          {showEarlier ? 'Hide earlier entries' : `Show ${EARLIER_ENTRIES} earlier entries`}
+        </button>
+
+        <ol className={styles.log} id="mission-log">
+          {visibleEvents.map((event, index) => (
+            <TimelineEntry key={event.id} event={event} index={index} isInView={isInView} />
+          ))}
+        </ol>
       </div>
     </section>
   );

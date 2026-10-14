@@ -4,34 +4,35 @@
   position: sticky;
   top: 0;
   z-index: var(--z-sticky);
-  background-color: var(--color-bg-primary);
   border-bottom: 1px solid var(--color-border);
+  @include glass-effect;
   @include transition(background-color, border-color);
-
-  // Frosted glass effect for light theme
-  [data-theme='light'] & {
-    background: rgba(250, 251, 255, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(79, 70, 229, 0.08);
-  }
 }
 
 .container {
   @include container;
   @include flex-between;
+  gap: var(--spacing-lg);
   height: var(--header-height);
 }
 
 .logo {
-  font-size: var(--font-size-xl);
-  font-weight: 700;
-  color: var(--color-primary);
-  letter-spacing: -0.5px;
-  @include transition(color);
+  font-family: var(--font-display);
+  font-size: var(--font-size-md);
+  font-weight: 800;
+  font-stretch: 118%;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  white-space: nowrap;
+
+  span {
+    color: var(--color-primary);
+    margin-left: 2px;
+  }
 
   &:hover {
-    color: var(--color-primary-hover);
+    color: var(--color-text-primary);
   }
 }
 
@@ -44,21 +45,20 @@
 
 .navList {
   display: flex;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-xl);
 }
 
 .navLink {
-  font-size: var(--font-size-md);
-  font-weight: 500;
+  @include eyebrow;
+  font-size: var(--font-size-sm);
   color: var(--color-text-secondary);
   padding: var(--spacing-sm) 0;
   position: relative;
-  @include transition(color);
 
   &::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: 2px;
     left: 0;
     width: 0;
     height: 2px;
@@ -79,25 +79,37 @@
 .controls {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
 }
 
-.fontSizeControls,
-.themeControls {
+.desktopControls,
+.mobileControls {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-xs);
-  background-color: var(--color-bg-secondary);
-  border-radius: var(--radius-md);
+  gap: var(--spacing-sm);
+}
 
-  @include respond-below('sm') {
+.desktopControls {
+  @include respond-below('md') {
     display: none;
   }
 }
 
-.fontSizeButton,
-.themeButton {
+.mobileControls {
+  padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.controlGroup {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.controlButton {
   @include flex-center;
   width: 32px;
   height: 32px;
@@ -111,22 +123,21 @@
   }
 
   &:disabled {
-    opacity: 0.4;
+    opacity: 0.35;
     cursor: not-allowed;
   }
 
   &:focus-visible {
     @include focus-ring;
   }
-}
 
-.themeButton {
   &.active {
     background-color: var(--color-primary);
     color: var(--color-text-inverse);
 
     &:hover {
       background-color: var(--color-primary-hover);
+      color: var(--color-text-inverse);
     }
   }
 }
@@ -136,16 +147,17 @@
   @include flex-center;
   width: 40px;
   height: 40px;
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   color: var(--color-text-primary);
-  @include transition(background-color);
+  @include transition(background-color, border-color);
 
   @include respond-to('md') {
     display: none;
   }
 
   &:hover {
-    background-color: var(--color-bg-secondary);
+    border-color: var(--color-primary);
   }
 
   &:focus-visible {
@@ -161,7 +173,7 @@
   right: 0;
   background-color: var(--color-bg-primary);
   border-bottom: 1px solid var(--color-border);
-  transform: translateY(-100%);
+  transform: translateY(-8px);
   opacity: 0;
   visibility: hidden;
   @include transition(transform, opacity, visibility);
@@ -179,19 +191,21 @@
 
 .mobileNavList {
   @include flex-column;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
 }
 
 .mobileNavLink {
   display: block;
-  padding: var(--spacing-md);
-  font-size: var(--font-size-lg);
-  font-weight: 500;
+  padding: var(--spacing-md) var(--spacing-sm);
+  font-family: var(--font-display);
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  font-stretch: 70%;
+  text-transform: uppercase;
   color: var(--color-text-primary);
-  border-radius: var(--radius-md);
-  @include transition(background-color);
+  border-bottom: 1px solid var(--color-border);
 
   &:hover {
-    background-color: var(--color-bg-secondary);
+    color: var(--color-primary);
   }
 }

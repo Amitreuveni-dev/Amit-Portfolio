@@ -1,282 +1,190 @@
 @use '../../styles/mixins' as *;
 
 .timeline {
-  padding: var(--spacing-3xl) 0;
+  --meta-width: 190px;
+  --rail-width: 40px;
+  padding-block: var(--section-padding);
   background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border);
   @include scroll-section;
-
-  // Modern gradient for light theme
-  [data-theme='light'] & {
-    background:
-      radial-gradient(ellipse 100% 50% at 0% 50%, rgba(79, 70, 229, 0.04) 0%, transparent 50%),
-      radial-gradient(ellipse 100% 50% at 100% 50%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
-      var(--color-bg-secondary);
-  }
 }
 
 .container {
   @include container;
 }
 
+// Section heading
 .sectionHeader {
-  text-align: center;
-  margin-bottom: var(--spacing-3xl);
+  @include section-header;
 }
 
-.sectionTitle {
-  font-size: var(--font-size-4xl);
-  font-weight: 700;
-  color: var(--color-text-primary);
-  margin-bottom: var(--spacing-sm);
+.eyebrow {
+  @include eyebrow;
+  color: var(--color-primary);
 }
 
-.sectionSubtitle {
-  font-size: var(--font-size-lg);
-  color: var(--color-text-secondary);
-  margin-bottom: 0;
-}
-
-.timelineWrapper {
-  position: relative;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.line {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 3px;
-  background: linear-gradient(
-    180deg,
-    var(--color-primary) 0%,
-    var(--color-accent) 50%,
-    var(--color-accent-olive) 100%
-  );
-  transform-origin: top;
-  border-radius: var(--radius-full);
-
-  @include respond-below('md') {
-    left: 20px;
-  }
-}
-
-.events {
+.headingRow {
   display: flex;
-  flex-direction: column;
-  gap: var(--spacing-2xl);
-}
-
-.timelineItem {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-
-  @include respond-below('md') {
-    padding-left: 60px;
-  }
-
-  &.left {
-    justify-content: flex-start;
-    padding-right: calc(50% + 40px);
-
-    @include respond-below('md') {
-      padding-right: 0;
-    }
-
-    .content {
-      text-align: right;
-
-      @include respond-below('md') {
-        text-align: left;
-      }
-    }
-
-    .header {
-      flex-direction: row-reverse;
-
-      @include respond-below('md') {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-
-    .highlights {
-      justify-content: flex-end;
-
-      @include respond-below('md') {
-        justify-content: flex-start;
-      }
-    }
-
-    .iconWrapper {
-      margin-left: var(--spacing-md);
-      margin-right: 0;
-
-      @include respond-below('md') {
-        margin-left: 0;
-        margin-right: var(--spacing-md);
-      }
-    }
-
-    .connector {
-      right: -40px;
-      left: auto;
-
-      @include respond-below('md') {
-        left: -40px;
-        right: auto;
-      }
-    }
-  }
-
-  &.right {
-    justify-content: flex-end;
-    padding-left: calc(50% + 40px);
-
-    @include respond-below('md') {
-      padding-left: 60px;
-    }
-
-    .connector {
-      left: -40px;
-
-      @include respond-below('md') {
-        left: -40px;
-      }
-    }
-  }
-
-  // Theme colors
-  &.military {
-    .iconWrapper {
-      background-color: rgba(101, 163, 13, 0.15);
-      color: var(--color-accent-olive);
-      border-color: var(--color-accent-olive);
-    }
-
-    .dot {
-      background-color: var(--color-accent-olive);
-      box-shadow: 0 0 20px rgba(101, 163, 13, 0.5);
-    }
-
-    .tag {
-      background-color: rgba(101, 163, 13, 0.1);
-      color: var(--color-accent-olive);
-      border-color: rgba(101, 163, 13, 0.3);
-    }
-  }
-
-  &.education {
-    .iconWrapper {
-      background-color: var(--color-primary-light);
-      color: var(--color-primary);
-      border-color: var(--color-primary);
-    }
-
-    .dot {
-      background-color: var(--color-primary);
-      box-shadow: 0 0 20px rgba(37, 99, 235, 0.5);
-    }
-
-    .tag {
-      background-color: var(--color-primary-light);
-      color: var(--color-primary);
-      border-color: rgba(37, 99, 235, 0.3);
-    }
-  }
-
-  &.volunteer {
-    .iconWrapper {
-      background-color: rgba(139, 92, 246, 0.15);
-      color: var(--color-accent);
-      border-color: var(--color-accent);
-    }
-
-    .dot {
-      background-color: var(--color-accent);
-      box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
-    }
-
-    .tag {
-      background-color: rgba(139, 92, 246, 0.1);
-      color: var(--color-accent);
-      border-color: rgba(139, 92, 246, 0.3);
-    }
-  }
-}
-
-.content {
-  display: flex;
-  align-items: flex-start;
-  background-color: var(--color-bg-primary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  box-shadow: var(--shadow-md);
-  @include transition(box-shadow, border-color, transform);
-
-  &:hover {
-    box-shadow: var(--shadow-xl);
-    border-color: var(--color-border-hover);
-    transform: translateY(-4px);
-  }
-
-  @include respond-below('md') {
-    flex-direction: row;
-  }
-}
-
-.iconWrapper {
-  @include flex-center;
-  flex-shrink: 0;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
-  border: 2px solid;
-  margin-right: var(--spacing-md);
-}
-
-.details {
-  flex: 1;
-}
-
-.header {
-  display: flex;
-  align-items: center;
+  justify-content: space-between;
+  align-items: flex-end;
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-sm);
   flex-wrap: wrap;
 }
 
-.title {
-  font-size: var(--font-size-xl);
-  font-weight: 600;
-  color: var(--color-text-primary);
-  margin: 0;
+.sectionTitle {
+  @include display-type;
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
+}
+
+.order {
+  @include eyebrow;
+}
+
+// The log: date column | rail with markers | entry
+// The rail line is drawn by each entry's marker cell, so it always passes through the dots
+.entry {
+  display: grid;
+  grid-template-columns: var(--meta-width) var(--rail-width) minmax(0, 1fr);
+  column-gap: var(--spacing-lg);
+
+  @include respond-below('md') {
+    grid-template-columns: var(--rail-width) minmax(0, 1fr);
+    column-gap: var(--spacing-md);
+  }
+
+  // Theme colors for the marker
+  &.education {
+    --marker-color: var(--color-primary);
+  }
+
+  &.military {
+    --marker-color: var(--color-accent);
+  }
+
+  &.volunteer {
+    --marker-color: var(--color-text-secondary);
+  }
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 6px;
+  text-align: right;
+
+  @include respond-below('md') {
+    grid-column: 2;
+    grid-row: 1;
+    flex-direction: row;
+    gap: var(--spacing-md);
+    text-align: left;
+    padding-top: 0;
+  }
 }
 
 .period {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
+  font-family: var(--font-mono);
   font-size: var(--font-size-sm);
-  color: var(--color-text-tertiary);
-  white-space: nowrap;
+  font-weight: 500;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.type {
+  @include eyebrow;
+  color: var(--marker-color);
+}
+
+.marker {
+  position: relative;
+  display: flex;
+  justify-content: center;
+
+  // Rail segment through this entry
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    margin-left: -1px;
+    background-color: var(--color-border);
+  }
+
+  @include respond-below('md') {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+}
+
+// First entry's rail starts at its dot, last entry's rail ends at its dot
+.entry:first-child .marker::before {
+  top: 12px;
+}
+
+.entry:last-child .marker::before {
+  bottom: auto;
+  height: 12px;
+}
+
+.dot {
+  position: relative;
+  margin-top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--marker-color);
+  // A ring in the section's own background color separates the dot from the rail in every theme
+  box-shadow:
+    0 0 0 4px var(--color-bg-secondary),
+    0 0 0 5px color-mix(in srgb, var(--marker-color) 45%, transparent);
+}
+
+.body {
+  min-width: 0;
+  padding-bottom: clamp(var(--spacing-xl), 4vw, var(--spacing-2xl));
+
+  @include respond-below('md') {
+    grid-column: 2;
+    grid-row: 2;
+    padding-top: var(--spacing-xs);
+  }
+}
+
+.title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm) var(--spacing-md);
+  font-size: clamp(1.25rem, 2.4vw, 1.6rem);
+  font-weight: 700;
+  font-stretch: 85%;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.now {
+  @include eyebrow;
+  font-size: 0.6875rem;
+  padding: 3px 8px;
+  border-radius: var(--radius-sm);
+  color: var(--color-text-inverse);
+  background-color: var(--color-primary);
 }
 
 .subtitle {
-  font-size: var(--font-size-md);
-  font-weight: 500;
-  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
   margin-bottom: var(--spacing-sm);
 }
 
 .description {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  line-height: 1.7;
+  font-size: var(--font-size-md);
+  line-height: 1.65;
+  max-width: 68ch;
   margin-bottom: var(--spacing-md);
 }
 
@@ -287,26 +195,45 @@
 }
 
 .tag {
-  display: inline-block;
-  padding: var(--spacing-xs) var(--spacing-sm);
+  font-family: var(--font-mono);
   font-size: var(--font-size-xs);
-  font-weight: 500;
+  padding: 3px 10px;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-full);
-  border: 1px solid;
 }
 
-.connector {
-  position: absolute;
-  top: 24px;
-  width: 40px;
-  display: flex;
+// Show earlier entries
+.toggle {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-}
+  gap: var(--spacing-sm);
+  margin-left: calc(var(--meta-width) + var(--rail-width) + 2 * var(--spacing-lg));
+  margin-bottom: var(--spacing-xl);
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  @include transition(color, border-color);
 
-.dot {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 3px solid var(--color-bg-primary);
+  &:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  @include respond-below('md') {
+    margin-left: calc(var(--rail-width) + var(--spacing-md));
+  }
+
+  svg {
+    @include transition(transform);
+  }
+
+  .flipped {
+    transform: rotate(180deg);
+  }
 }

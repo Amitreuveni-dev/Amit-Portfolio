@@ -1,23 +1,7 @@
-// Theme Types
+// Display preference types
 export type ThemeMode = 'light' | 'dark' | 'high-contrast';
 
-export interface ThemeState {
-  mode: ThemeMode;
-}
-
-// UI State Types
 export type FontSize = 'small' | 'medium' | 'large';
-
-export interface UIState {
-  fontSize: FontSize;
-  isAccessibilityPanelOpen: boolean;
-}
-
-// Root State Type
-export interface RootState {
-  theme: ThemeState;
-  ui: UIState;
-}
 
 // Navigation Types
 export interface NavLink {

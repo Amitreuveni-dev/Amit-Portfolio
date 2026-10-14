@@ -1,199 +1,181 @@
 @use '../../styles/mixins' as *;
 
 .projects {
-  padding: var(--spacing-3xl) 0;
+  padding-block: var(--section-padding);
   background-color: var(--color-bg-primary);
   @include scroll-section;
-
-  // Subtle section gradient for light theme
-  [data-theme='light'] & {
-    background:
-      linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 30%, var(--color-bg-primary) 100%);
-  }
 }
 
 .container {
   @include container;
 }
 
+// Section heading
 .sectionHeader {
-  text-align: center;
-  margin-bottom: var(--spacing-3xl);
+  @include section-header;
+}
+
+.eyebrow {
+  @include eyebrow;
+  color: var(--color-primary);
+}
+
+.headingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
 }
 
 .sectionTitle {
-  font-size: var(--font-size-4xl);
-  font-weight: 700;
-  color: var(--color-text-primary);
-  margin-bottom: var(--spacing-sm);
+  @include display-type;
+  font-size: clamp(2.5rem, 6vw, 4.25rem);
 }
 
-.sectionSubtitle {
-  font-size: var(--font-size-lg);
-  color: var(--color-text-secondary);
-  margin-bottom: 0;
+.count {
+  @include eyebrow;
+  font-variant-numeric: tabular-nums;
 }
 
-.grid {
+// Bento: the flagship takes the tall left column, the rest stack on the right
+.bento {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--spacing-xl);
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: var(--spacing-md);
 
-  @include respond-to('lg') {
-    grid-template-columns: repeat(3, 1fr);
+  @include respond-below('lg') {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
-.card {
-  position: relative;
+.tile {
   display: flex;
   flex-direction: column;
-  padding: var(--spacing-xl);
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  cursor: pointer;
-
-  // Glassmorphism effect
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.1),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
-
-  @include transition(box-shadow);
-
-  [data-theme='light'] & {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(250, 251, 255, 0.95) 100%);
-    border: 1px solid rgba(79, 70, 229, 0.1);
-    box-shadow:
-      0 8px 32px rgba(79, 70, 229, 0.08),
-      0 2px 8px rgba(0, 0, 0, 0.04),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.8);
-  }
-
-  [data-theme='high-contrast'] & {
-    background: rgba(0, 0, 0, 0.8);
-    border: 2px solid var(--color-border);
-  }
+  gap: var(--spacing-lg);
+  min-width: 0;
+  padding: clamp(var(--spacing-lg), 2.5vw, var(--spacing-xl));
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  @include transition(border-color);
 
   &:hover {
-    box-shadow:
-      0 20px 60px rgba(0, 0, 0, 0.2),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    border-color: var(--color-border-hover);
+  }
 
-    [data-theme='light'] & {
-      box-shadow:
-        0 20px 60px rgba(79, 70, 229, 0.15),
-        0 8px 24px rgba(0, 0, 0, 0.06),
-        inset 0 0 0 1px rgba(255, 255, 255, 1);
-      border-color: rgba(79, 70, 229, 0.2);
+  &.featured {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    grid-row: span 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    gap: var(--spacing-xl);
+
+    .visual,
+    .body {
+      position: relative;
+      z-index: 1;
+    }
+
+    .visual {
+      order: 2;
+      align-self: center;
+    }
+
+    .phone {
+      width: 220px;
+      height: 320px;
+      font-size: 13px;
+    }
+
+    .title {
+      font-size: clamp(2.75rem, 5vw, 4rem);
+    }
+
+    @include respond-below('lg') {
+      grid-row: auto;
+    }
+
+    @include respond-below('md') {
+      grid-template-columns: minmax(0, 1fr);
+
+      .visual {
+        order: 0;
+      }
     }
   }
 }
 
-.glassOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.1) 0%,
-    rgba(255, 255, 255, 0) 50%,
-    rgba(255, 255, 255, 0.05) 100%
-  );
-  pointer-events: none;
-}
-
-.gradientBorder {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  opacity: 0.8;
-}
-
-.iconWrapper {
-  @include flex-center;
-  width: 64px;
-  height: 64px;
-  border-radius: var(--radius-lg);
-  margin-bottom: var(--spacing-lg);
-  box-shadow: var(--shadow-lg);
-}
-
-.icon {
-  color: white;
-}
-
-.content {
-  flex: 1;
+.body {
   display: flex;
   flex-direction: column;
+  min-width: 0;
+}
+
+.kicker {
+  @include eyebrow;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-sm);
 }
 
 .title {
-  font-size: var(--font-size-xl);
-  font-weight: 600;
-  color: var(--color-text-primary);
+  @include display-type;
+  font-size: clamp(2rem, 3.4vw, 2.5rem);
   margin-bottom: var(--spacing-sm);
 }
 
 .description {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-  line-height: 1.7;
-  margin-bottom: var(--spacing-lg);
-  flex: 1;
+  font-size: var(--font-size-md);
+  line-height: 1.6;
+  max-width: 52ch;
+  margin-bottom: var(--spacing-md);
 }
 
 .technologies {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  line-height: 1.8;
+  color: var(--color-text-tertiary);
   margin-bottom: var(--spacing-lg);
 }
 
-.tech {
-  display: inline-block;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  font-size: var(--font-size-xs);
-  font-weight: 500;
+.separator {
   color: var(--color-primary);
-  background-color: var(--color-primary-light);
-  border-radius: var(--radius-full);
-  @include transition(background-color, color);
+}
+
+// Keep multi-word names like "Vercel AI SDK" on one line
+.tech {
+  white-space: nowrap;
 }
 
 .links {
   display: flex;
-  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
   margin-top: auto;
 }
 
 .link {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-size: var(--font-size-sm);
+  gap: 6px;
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
   font-weight: 500;
-  color: var(--color-text-secondary);
-  background-color: var(--color-bg-tertiary);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
-  @include transition(background-color, color, transform, box-shadow);
+  @include transition(background-color, color, border-color);
 
   &:hover {
     color: var(--color-primary);
-    background-color: var(--color-bg-secondary);
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-
-    [data-theme='light'] & {
-      background-color: var(--color-bg-primary);
-      box-shadow: 0 8px 20px rgba(79, 70, 229, 0.15);
-    }
+    border-color: var(--color-primary);
   }
 
   &:focus-visible {
@@ -203,11 +185,147 @@
   &.primary {
     color: var(--color-text-inverse);
     background-color: var(--color-primary);
+    border-color: var(--color-primary);
 
     &:hover {
+      color: var(--color-text-inverse);
       background-color: var(--color-primary-hover);
-      color: #ffffff;
-      box-shadow: 0 8px 24px rgba(79, 70, 229, 0.4);
+      border-color: var(--color-primary-hover);
     }
+  }
+
+  &.private {
+    color: var(--color-text-tertiary);
+    border-style: dashed;
+    cursor: default;
+
+    &:hover {
+      color: var(--color-text-tertiary);
+      border-color: var(--color-border);
+    }
+  }
+}
+
+// ---------- Product previews ----------
+.visual {
+  display: flex;
+  min-width: 0;
+}
+
+// MiluAI: phone with a Hebrew conversation
+.phone {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 190px;
+  height: 270px;
+  padding: 28px 12px 12px;
+  margin-inline: auto;
+  font-size: 12px;
+  line-height: 1.45;
+  background-color: var(--color-bg-primary);
+  border: 1px solid var(--color-border);
+  border-radius: 26px;
+}
+
+.bubble {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 12px;
+  color: var(--color-text-primary);
+}
+
+.userBubble {
+  align-self: flex-start;
+  max-width: 88%;
+  background-color: var(--color-primary-light);
+  border: 1px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+}
+
+.botBubble {
+  align-self: flex-end;
+  width: 86%;
+  background-color: var(--color-bg-tertiary);
+}
+
+.skeleton {
+  display: block;
+  height: 6px;
+  margin-top: 7px;
+  border-radius: 3px;
+  background-color: var(--color-muted-fill);
+  animation: shimmer 1.8s ease-in-out infinite;
+
+  &:nth-child(2) {
+    width: 72%;
+    animation-delay: 0.2s;
+  }
+
+  &:nth-child(3) {
+    width: 88%;
+    animation-delay: 0.4s;
+  }
+}
+
+@keyframes shimmer {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+// Sidur: a week of shifts
+.shifts {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+  width: 100%;
+}
+
+.day {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  text-align: center;
+}
+
+.shift {
+  height: 22px;
+  border-radius: 3px;
+  background-color: var(--color-muted-fill);
+}
+
+.assigned {
+  background-color: color-mix(in srgb, var(--color-primary) 80%, transparent);
+}
+
+.assignedAlt {
+  background-color: color-mix(in srgb, var(--color-accent) 75%, transparent);
+}
+
+// Wordle: one solved row
+.word {
+  display: flex;
+  gap: 6px;
+
+  span {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    font-family: var(--font-display);
+    font-size: var(--font-size-xl);
+    font-weight: 800;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-primary);
+    background-color: var(--color-muted-fill);
+  }
+
+  .hit {
+    background-color: var(--color-accent);
+    color: var(--color-text-inverse);
+  }
+
+  .near {
+    background-color: var(--color-primary);
+    color: var(--color-text-inverse);
   }
 }

@@ -1,50 +1,58 @@
 @use '../../styles/mixins' as *;
 
 .contact {
-  padding: var(--spacing-3xl) 0;
-  background: linear-gradient(
-    180deg,
-    var(--color-bg-secondary) 0%,
-    var(--color-bg-primary) 100%
-  );
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-top: var(--section-padding);
+  background-color: var(--color-bg-primary);
   @include scroll-section;
-
-  // Modern gradient for light theme
-  [data-theme='light'] & {
-    background:
-      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(79, 70, 229, 0.06) 0%, transparent 50%),
-      linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg-primary) 100%);
-  }
 }
 
 .container {
   @include container;
-  @include flex-center;
-  min-height: 50vh;
+  position: relative;
+  z-index: 1;
 }
 
 .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 760px;
+  margin-inline: auto;
+  padding-bottom: var(--section-padding);
   text-align: center;
-  max-width: 600px;
+}
+
+.eyebrow {
+  @include eyebrow;
+  color: var(--color-primary);
+  margin-bottom: var(--spacing-md);
 }
 
 .title {
-  font-size: var(--font-size-4xl);
-  font-weight: 700;
-  color: var(--color-text-primary);
+  @include display-type;
+  font-size: clamp(3rem, 9vw, 6.5rem);
   margin-bottom: var(--spacing-lg);
+
+  em {
+    font-style: normal;
+    color: var(--color-primary);
+  }
 }
 
 .description {
   font-size: var(--font-size-lg);
-  color: var(--color-text-secondary);
-  line-height: 1.8;
+  line-height: 1.65;
+  max-width: 50ch;
   margin-bottom: var(--spacing-xl);
 }
 
 .emailWrapper {
   position: relative;
   display: inline-block;
+  max-width: 100%;
   margin-bottom: var(--spacing-xl);
 }
 
@@ -52,20 +60,18 @@
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-xl);
-  font-size: var(--font-size-lg);
+  max-width: 100%;
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-lg);
+  font-family: var(--font-mono);
+  font-size: clamp(var(--font-size-md), 2.4vw, var(--font-size-xl));
   color: var(--color-text-primary);
-  background-color: var(--color-bg-primary);
-  border: 2px solid var(--color-border);
+  background-color: color-mix(in srgb, var(--color-surface) 85%, transparent);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
-  @include transition(border-color, box-shadow, transform, background-color);
+  @include transition(border-color, background-color);
 
   &:hover {
     border-color: var(--color-primary);
-    box-shadow: 0 12px 28px rgba(79, 70, 229, 0.2);
-    transform: translateY(-4px);
-    background-color: var(--color-bg-secondary);
   }
 
   &:focus-visible {
@@ -74,65 +80,78 @@
 }
 
 .email {
-  font-weight: 500;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: left;
 }
 
 .copyIcon {
   @include flex-center;
-  width: 32px;
-  height: 32px;
-  background-color: var(--color-bg-secondary);
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
   border-radius: var(--radius-md);
-  color: var(--color-text-secondary);
-  @include transition(background-color, color);
-
-  .emailButton:hover & {
-    background-color: var(--color-primary);
-    color: var(--color-text-inverse);
-  }
+  color: var(--color-text-inverse);
+  background-color: var(--color-primary);
 }
 
 .toast {
   position: absolute;
-  bottom: -40px;
+  top: calc(100% + 8px);
   left: 50%;
-  transform: translateX(-50%);
-  padding: var(--spacing-sm) var(--spacing-md);
-  font-size: var(--font-size-sm);
-  font-weight: 500;
+  translate: -50% 0;
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
   color: var(--color-text-inverse);
-  background-color: var(--color-success);
-  border-radius: var(--radius-md);
+  background-color: var(--color-accent);
+  border-radius: var(--radius-sm);
   white-space: nowrap;
 }
 
-.socials {
+.links {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-sm);
 }
 
-.socialLink {
-  @include flex-center;
-  width: 56px;
-  height: 56px;
-  color: var(--color-text-secondary);
-  background-color: var(--color-bg-primary);
-  border: 2px solid var(--color-border);
-  border-radius: var(--radius-full);
-  text-decoration: none;
-  @include transition(border-color, color, transform, box-shadow, background-color);
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  letter-spacing: 0.04em;
+  color: var(--color-text-primary);
+  background-color: color-mix(in srgb, var(--color-bg-primary) 70%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  @include transition(border-color, color);
 
   &:hover {
-    color: #ffffff;
-    background-color: var(--color-primary);
+    color: var(--color-primary);
     border-color: var(--color-primary);
-    transform: translateY(-5px);
-    box-shadow: 0 12px 28px rgba(79, 70, 229, 0.35);
-    text-decoration: none;
   }
 
   &:focus-visible {
     @include focus-ring;
   }
+}
+
+.footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--color-border);
+}
+
+.footerInner {
+  @include container;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+  padding-block: var(--spacing-lg);
+  @include eyebrow;
 }

@@ -1,132 +1,189 @@
-import { useRef } from 'react';
+import { Fragment, useRef } from 'react';
 import { motion, useInView, type Variants } from 'framer-motion';
-import { ExternalLink, Github, Gamepad2, CalendarDays, Shield } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { ArrowUpRight, Github, Lock } from 'lucide-react';
+import TopoBackground from '../TopoBackground/TopoBackground';
 import styles from './Projects.module.scss';
+
+type ProjectVisual = 'chat' | 'shifts' | 'word';
 
 interface Project {
   id: string;
   title: string;
+  kicker: string;
   description: string;
   technologies: string[];
-  Icon: LucideIcon;
+  visual: ProjectVisual;
+  featured?: boolean;
   githubUrl?: string;
+  isPrivateRepo?: boolean;
   liveUrl?: string;
-  gradient: string;
 }
 
 const PROJECTS_DATA: Project[] = [
   {
     id: 'milu-ai',
     title: 'MiluAI',
+    kicker: 'Flagship · Live since early 2026',
     description:
-      'An AI-powered chat assistant for Israeli reservists, providing instant answers about military reserve rights, compensation, benefits, and entitlements in plain Hebrew. Features streaming responses, glassmorphism design, RTL support, PWA installable, issue reporting with email notifications, and full analytics. Privacy-first architecture with rate limiting and session replay.',
-    technologies: ['Next.js 16', 'TypeScript', 'Tailwind CSS', 'Vercel AI SDK', 'Claude API', 'MongoDB', 'Resend', 'PostHog', 'Sentry', 'PWA'],
-    Icon: Shield,
-    githubUrl: 'https://github.com/Amitreuveni-dev/milu-ai',
+      "An AI chat assistant that answers IDF reservists' questions about their rights, pay and benefits in plain Hebrew. I built and launched it on my own: streaming answers, full RTL, installable PWA, rate limiting, analytics and error tracking.",
+    technologies: ['Next.js 16', 'TypeScript', 'Claude API', 'Vercel AI SDK', 'MongoDB', 'Tailwind CSS', 'PostHog', 'Sentry', 'Resend'],
+    visual: 'chat',
+    featured: true,
+    isPrivateRepo: true,
     liveUrl: 'https://milu-ai.vercel.app/',
-    gradient: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
   },
-  
   {
-  id: 'sidur-app',
-  title: 'Sidur - AI Shift Management',
-  description: 
-    'A smart workforce management platform designed for seamless shift scheduling. It features an AI-driven availability parser that interprets complex employee requests into structured data, ensuring optimal coverage and zero scheduling conflicts.',
-  technologies: ['Next.js 16', 'Tailwind v4', 'AI Availability Parser'],
-  Icon: CalendarDays,
-  githubUrl: 'https://github.com/Amitreuveni-dev/Sidur',
-  liveUrl: 'https://sidur.vercel.app/',
-  gradient: 'linear-gradient(135deg, #0ea5e9 0%, #22c55e 100%)',
-},
+    id: 'sidur-app',
+    title: 'Sidur',
+    kicker: 'AI shift management',
+    description:
+      'A shift scheduler for a food-service branch. An AI parser turns free-text availability requests into structured data, so the weekly plan has no conflicts.',
+    technologies: ['Next.js 16', 'Tailwind v4', 'AI parsing', 'PWA'],
+    visual: 'shifts',
+    githubUrl: 'https://github.com/Amitreuveni-dev/Sidur',
+    liveUrl: 'https://sidur.vercel.app/',
+  },
   {
     id: 'wordle',
-    title: 'Wordle Clone',
+    title: 'Wordle',
+    kicker: 'Team project',
     description:
-      'A faithful recreation of the popular word-guessing game built as a team project during a course. Includes keyboard input, color-coded feedback, and game state persistence.',
+      'A Wordle-style game built with a course team: six daily guesses, color-coded feedback and a leaderboard.',
     technologies: ['React', 'TypeScript', 'Local Storage', 'CSS Animations'],
-    Icon: Gamepad2,
-    githubUrl: 'https://github.com/amitr/wordle',
-    liveUrl: "https://wordle-hn9f.onrender.com",
-    gradient: 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)',
+    visual: 'word',
+    githubUrl: 'https://github.com/Amitreuveni-dev/Wordle',
+    liveUrl: 'https://wordle-hn9f.onrender.com',
   },
-
 ];
+
+const SHIFT_DAYS = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ש'];
+// 0 = open, 1 = assigned, 2 = assigned to a second employee
+const SHIFT_GRID = [
+  [1, 2, 1, 0, 1, 2, 0],
+  [2, 1, 0, 2, 1, 1, 2],
+];
+const WORD = [
+  { letter: 'B', state: 'hit' },
+  { letter: 'U', state: 'miss' },
+  { letter: 'I', state: 'near' },
+  { letter: 'L', state: 'hit' },
+  { letter: 'D', state: 'hit' },
+] as const;
+
+// Small CSS-drawn previews of each product, standing in until real screenshots are added
+const ProjectVisualPreview = ({ visual }: { visual: ProjectVisual }): React.JSX.Element => {
+  if (visual === 'chat') {
+    return (
+      <div className={styles.phone} aria-hidden="true" dir="rtl" lang="he">
+        <span className={`${styles.bubble} ${styles.userBubble}`}>כמה מגיע לי על 30 ימי מילואים?</span>
+        <span className={`${styles.bubble} ${styles.botBubble}`}>
+          בודק את הזכויות שלך…
+          <span className={styles.skeleton} />
+          <span className={styles.skeleton} />
+          <span className={styles.skeleton} />
+        </span>
+      </div>
+    );
+  }
+
+  if (visual === 'shifts') {
+    return (
+      <div className={styles.shifts} aria-hidden="true" dir="rtl" lang="he">
+        {SHIFT_DAYS.map((day) => (<span key={day} className={styles.day}>{day}</span>))}
+        {SHIFT_GRID.flatMap((row, rowIndex) => row.map((cell, cellIndex) => (
+          <span key={`${rowIndex}-${cellIndex}`}
+            className={`${styles.shift} ${cell === 1 ? styles.assigned : ''} ${cell === 2 ? styles.assignedAlt : ''}`} />
+        )))}
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.word} aria-hidden="true">
+      {WORD.map(({ letter, state }) => (<span key={letter} className={styles[state]}>{letter}</span>))}
+    </div>
+  );
+};
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3,
+      staggerChildren: 0.12,
     },
   },
 };
 
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 60, scale: 0.95 },
+const tileVariants: Variants = {
+  hidden: { opacity: 0, y: 24 },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
     transition: {
-      type: 'spring',
-      stiffness: 100,
-      damping: 15,
+      duration: 0.5,
+      ease: 'easeOut',
     },
   },
 };
 
-interface ProjectCardProps {
-  project: Project;
-}
-
-const ProjectCard = ({ project }: ProjectCardProps): React.JSX.Element => {
-  return (
-    <motion.article className={styles.card} variants={cardVariants} whileHover={{ scale: 1.05, y: -10 }} whileTap={{ scale: 0.98 }}>
-      <div className={styles.glassOverlay} />
-      <div className={styles.iconWrapper} style={{ background: project.gradient }}>
-        <project.Icon size={32} className={styles.icon} />
+const ProjectTile = ({ project }: { project: Project }): React.JSX.Element => (
+  <motion.article className={`${styles.tile} ${project.featured ? styles.featured : ''}`} variants={tileVariants}>
+    {project.featured && <TopoBackground seed={5} peakX={0.72} peakY={0.38} />}
+    <div className={styles.visual}>
+      <ProjectVisualPreview visual={project.visual} />
+    </div>
+    <div className={styles.body}>
+      <p className={styles.kicker}>{project.kicker}</p>
+      <h3 className={styles.title}>{project.title}</h3>
+      <p className={styles.description}>{project.description}</p>
+      <p className={styles.technologies}>
+        {project.technologies.map((tech, index) => (
+          <Fragment key={tech}>
+            {index > 0 && <span className={styles.separator} aria-hidden="true"> · </span>}
+            <span className={styles.tech}>{tech}</span>
+          </Fragment>
+        ))}
+      </p>
+      <div className={styles.links}>
+        {project.liveUrl && (
+          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className={`${styles.link} ${styles.primary}`}
+            aria-label={`Open ${project.title} live site`}>
+            Live site<ArrowUpRight size={16} aria-hidden="true" />
+          </a>
+        )}
+        {project.githubUrl && (
+          <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className={styles.link}
+            aria-label={`View ${project.title} source code on GitHub`}>
+            <Github size={16} aria-hidden="true" />Code
+          </a>
+        )}
+        {project.isPrivateRepo && (
+          <span className={`${styles.link} ${styles.private}`} title="Source code is in a private repository">
+            <Lock size={14} aria-hidden="true" />Private repo
+          </span>
+        )}
       </div>
-      <div className={styles.content}>
-        <h3 className={styles.title}>{project.title}</h3>
-        <p className={styles.description}>{project.description}</p>
-        <div className={styles.technologies}>
-          {project.technologies.map((tech) => (<span key={tech} className={styles.tech}>{tech}</span>))}
-        </div>
-        <div className={styles.links}>
-          {project.githubUrl && (
-            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className={styles.link} aria-label={`View ${project.title} on GitHub`}>
-              <Github size={20} /><span>Code</span>
-            </a>
-          )}
-          {project.liveUrl && (
-            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className={`${styles.link} ${styles.primary}`} aria-label={`View ${project.title} live demo`}>
-              <ExternalLink size={20} /><span>Live Demo</span>
-            </a>
-          )}
-        </div>
-      </div>
-      <div className={styles.gradientBorder} style={{ background: project.gradient }} />
-    </motion.article>
-  );
-};
+    </div>
+  </motion.article>
+);
 
 const Projects = (): React.JSX.Element => {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const isInView = useInView(sectionRef, { once: true, margin: '-80px' });
 
   return (
     <section id="projects" className={styles.projects} ref={sectionRef}>
       <div className={styles.container}>
-        <motion.div className={styles.sectionHeader} initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }} transition={{ type: 'spring', stiffness: 100, damping: 15 }}>
-          <h2 className={styles.sectionTitle}>Featured Projects</h2>
-          <p className={styles.sectionSubtitle}>A showcase of my recent work and side projects</p>
-        </motion.div>
-        <motion.div className={styles.grid} variants={containerVariants} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
-          {PROJECTS_DATA.map((project) => (<ProjectCard key={project.id} project={project} />))}
+        <header className={styles.sectionHeader}>
+          <p className={styles.eyebrow}>Selected work</p>
+          <div className={styles.headingRow}>
+            <h2 className={styles.sectionTitle}>Things I&apos;ve shipped</h2>
+            <span className={styles.count}>{String(PROJECTS_DATA.length).padStart(2, '0')} projects</span>
+          </div>
+        </header>
+        <motion.div className={styles.bento} variants={containerVariants} initial="hidden" animate={isInView ? 'visible' : 'hidden'}>
+          {PROJECTS_DATA.map((project) => (<ProjectTile key={project.id} project={project} />))}
         </motion.div>
       </div>
     </section>
